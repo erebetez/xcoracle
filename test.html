@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <style></style>
+    <script src="http://www.xcontest.org/api/js/?key=03ECF5952EB046AC-A53195E89B7996E4-D1B128E82C3E2A66" type="text/javascript"></script>    
+  </head>
+  <body><h1>hallo</h1>
+  <p>kik ass</p>
+  <div>
+  
+   <div id="flights"></div>
+   <script type="text/javascript">
+    XContest.run("flights", {
+			source : {league : "ccc", volume : "2018",},
+			list : {
+        defaults : {
+          num : 100,
+          sort : "points"
+          
+        },
+        joinWith : {filter : {date : "last", fai_classes : "3"}}
+        
+      },
+      has : {
+        filter: false,
+        timeStartDate : false,
+        pilotCountry : false,
+        pagingTop : true,
+        pagingBottom : true,
+        cols : ["number", "time_start", "pilot", "launch", "route", "distance",  "points", "speed", "fans", "glider", "info"]
+      }
+		});
+</script>
+  
+  </div>
+  
+  
+  </body>
+</html>

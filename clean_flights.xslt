@@ -9,7 +9,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 </flights>
 </xsl:template>
 
-<xsl:template match="tr">
+<xsl:template match="tr[@id]">
  <flight>
   <time><xsl:value-of select="td/div/em"/></time>
   <location><xsl:value-of select="td/div/a[@class='lau']"/></location>
@@ -18,5 +18,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
  </flight>
 </xsl:template>
 
+<xsl:template match="text()"/>
 
 </xsl:stylesheet>

@@ -1,1 +1,1 @@
-xsltproc --html clean_flights.xslt $1 > $2
+xsltproc --html clean_flights.xslt $1

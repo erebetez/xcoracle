@@ -36,7 +36,6 @@ function span_xslt(page_content, cb){
     xslt.stdin.end();
 
     xslt.stdout.on('data', (data) => {
-//       console.log(`stdout: ${data}`);
       retr_data = retr_data + data;
     });
 
@@ -54,17 +53,17 @@ function span_xslt(page_content, cb){
     });
 }
 
-(async () => {
+(async (date) => {
     try {
-        let page_content = await get_flights_by_date('2018-05-13');
-        fs.writeFile('2018-05-13.html', page_content, ((err) => {if(err){console.log(err)}}));
+        let page_content = await get_flights_by_date(date);
+        fs.writeFile(date + '.html', page_content, ((err) => {if(err){console.log(err)}}));
 
         span_xslt(page_content, ((clean_flights) => {
           console.log("clean_flights: " + clean_flights);
-          fs.writeFile('2018-05-13.xml', clean_flights, ((err) => {if(err){console.log(err)}}));
+          fs.writeFile(date + '.xml', clean_flights, ((err) => {if(err){console.log(err)}}));
         }));
 
     } catch(e) {
         console.log(e);
     }
-})()
+})('2018-05-14')

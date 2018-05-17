@@ -2,14 +2,6 @@
 
 const fs = require('fs');
 const puppeteer = require('puppeteer');
-const xmlserializer = require('xmlserializer');
-
-var html2xhtml = function (htmlString) {
-    var parser = require('parse5'),
-        dom = parser.parse(htmlString);
- 
-    return xmlserializer.serializeToString(dom);
-};
 
 (async() => {
 
@@ -25,16 +17,11 @@ await page.goto('http://www.xcontest.org/switzerland/de/fluge/tageswertung-pg/#f
 console.log("Loaded!")
 
 
-//const flights = await page.$('#flights');
+var page_content = await page.content();
+//console.log(page_content);
 
-//let bodyHTML = await page.evaluate(() => document.body.innerHTML);
 
-await page.screenshot({path: 'example.png'});
-
-var xhtml = html2xhtml(document.body.innerHTML);
-
-await fs.write('1.html', xhtml, 'w');
-//page.$(selector)
+fs.writeFile('1.html', page_content, ((err) => {if(err){console.log(err)}}));
 
 await browser.close();
 

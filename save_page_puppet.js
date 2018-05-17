@@ -7,6 +7,10 @@ const { spawn } = require('child_process');
 
 const xcontest_url = 'http://www.xcontest.org/switzerland/de/fluge/tageswertung-pg/'
 
+const output_dir = 'fligts'
+
+fs.mkdir(output_dir, ((err) => {if(err){console.log(err)}}))
+
 async function get_flights_by_date(date) {
 
     const browser = await puppeteer.launch({
@@ -56,11 +60,11 @@ function span_xslt(page_content, cb){
 (async (date) => {
     try {
         let page_content = await get_flights_by_date(date);
-        fs.writeFile(date + '.html', page_content, ((err) => {if(err){console.log(err)}}));
+//         fs.writeFile(output_dir + '/' + date + '.html', page_content, ((err) => {if(err){console.log(err)}}));
 
         span_xslt(page_content, ((clean_flights) => {
           console.log("clean_flights: " + clean_flights);
-          fs.writeFile(date + '.xml', clean_flights, ((err) => {if(err){console.log(err)}}));
+          fs.writeFile(output_dir + '/' + date + '.xml', clean_flights, ((err) => {if(err){console.log(err)}}));
         }));
 
     } catch(e) {

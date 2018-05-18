@@ -48,7 +48,6 @@ function span_xslt(page_content, cb){
     });
 
     xslt.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
       if(code === 0){
         cb(retr_data);
       } else {
@@ -63,7 +62,7 @@ function span_xslt(page_content, cb){
 //         fs.writeFile(output_dir + '/' + date + '.html', page_content, ((err) => {if(err){console.log(err)}}));
 
         span_xslt(page_content, ((clean_flights) => {
-          console.log("clean_flights: " + clean_flights);
+//           console.log("clean_flights: " + clean_flights);
           fs.writeFile(output_dir + '/' + date + '.xml', clean_flights, ((err) => {if(err){console.log(err)}}));
         }));
 

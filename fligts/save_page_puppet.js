@@ -4,12 +4,20 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 const { spawn } = require('child_process');
 
+const dates = require('./dates');
 
 const xcontest_url = 'http://www.xcontest.org/switzerland/de/fluge/tageswertung-pg/'
 
-const output_dir = 'fligts'
+const datesArray = dates.getDateStringArray(
+    new Date("2018-05-03"),
+    new Date("2018-05-11")
+)
 
-fs.mkdir(output_dir, ((err) => {if(err){console.log(err)}}))
+const output_dir = 'data'
+
+// console.log(datesArray);
+
+// fs.mkdir(output_dir, ((err) => {if(err){console.log(err)}}))
 
 async function get_flights_by_date(date) {
 
@@ -56,7 +64,7 @@ function span_xslt(page_content, cb){
     });
 }
 
-(async (date) => {
+async function main(date) {
     try {
         let page_content = await get_flights_by_date(date);
 //         fs.writeFile(output_dir + '/' + date + '.html', page_content, ((err) => {if(err){console.log(err)}}));
@@ -69,4 +77,10 @@ function span_xslt(page_content, cb){
     } catch(e) {
         console.log(e);
     }
-})('2018-05-14')
+}
+
+// main("2018-05-16");
+
+datesArray.forEach(async (date_string) => {
+    main(date_string);
+});

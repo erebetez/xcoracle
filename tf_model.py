@@ -38,7 +38,7 @@ def parse_csv(line):
                       [0]]  # sets field types
   parsed_line = tf.decode_csv(line, example_defaults)
   # First 4 fields are features, combine into single tensor
-  features = tf.reshape(parsed_line[:-1], shape=(88,))
+  features = tf.reshape(parsed_line[:-1], shape=(88,)) # TODO use matrix 8, 11?
   # Last field is the label
   label = tf.reshape(parsed_line[-1], shape=())
   return features, label
@@ -78,8 +78,8 @@ print("example label:", label[0])
 
 
 model = tf.keras.Sequential([
-  tf.keras.layers.Dense(10, activation="relu", input_shape=(88,)),  # input shape required
-  tf.keras.layers.Dense(10, activation="relu"),
+  tf.keras.layers.Dense(88, activation="relu", input_shape=(88,)),  # input shape required
+  tf.keras.layers.Dense(176, activation="relu"),
   tf.keras.layers.Dense(4)
 ])
 

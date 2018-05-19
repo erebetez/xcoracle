@@ -4,4 +4,6 @@ import parsing_weather as pw
 
 print(pw.get_weater_features())
 
-print(pf.get_location_label_list())
+print(pf.get_location_label_dict())
+
+print(pf.get_location_index())

@@ -1,4 +1,7 @@
 import xml.etree.ElementTree as ET
+from datetime import date, timedelta
+
+data_folder = 'flights/data/'
 
 def is_number(s):
     try:
@@ -7,7 +10,7 @@ def is_number(s):
     except ValueError:
         return False
 
-def parseFlights(fileName):
+def parse_flights(fileName):
     tree = ET.parse(fileName)
     root = tree.getroot()
     locationDict = {}
@@ -46,7 +49,7 @@ def parseFlights(fileName):
 
     return locationRankingList
 
-def getBestLocation(locationRankingList):
+def get_best_location(locationRankingList):
     min_flights = 3
     min_points = 50
 
@@ -56,3 +59,26 @@ def getBestLocation(locationRankingList):
         return '' # for sake of consitency
     else:
         return filtered.pop()['location']
+
+
+def best_locaction_per_day(day):
+    locationRankingList = parse_flights(data_folder + day + '.xml')
+
+    best_loc = get_best_location(locationRankingList)
+
+    return best_loc
+
+## TODO just read files in folder...
+
+def get_location_label_list():
+    d1 = date(2018, 5, 3)  # start date
+    d2 = date(2018, 5, 16)  # end date
+
+    delta = d2 - d1         # timedelta
+
+    label_dict = {}
+
+    for i in range(delta.days + 1):
+        _date = d1 + timedelta(days=i)
+        label_dict[_date.isoformat()] = best_locaction_per_day(_date.isoformat())
+    return label_dict

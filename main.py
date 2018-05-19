@@ -16,16 +16,19 @@ def best_locaction_per_day(day):
 
 #print(best_locaction_per_day('2018-05-06'))
 
+## TODO just read files in folder...
 
-d1 = date(2018, 5, 3)  # start date
-d2 = date(2018, 5, 16)  # end date
+def get_label_list():
+    d1 = date(2018, 5, 3)  # start date
+    d2 = date(2018, 5, 16)  # end date
 
-delta = d2 - d1         # timedelta
+    delta = d2 - d1         # timedelta
 
-label_list = list()
+    label_list = list()
 
-for i in range(delta.days + 1):
-    date = d1 + timedelta(days=i)
-    label_list.append({date.isoformat(): best_locaction_per_day(date.isoformat())})
+    for i in range(delta.days + 1):
+        _date = d1 + timedelta(days=i)
+        label_list.append({_date.isoformat(): best_locaction_per_day(_date.isoformat())})
+    return label_list
 
-print(label_list)
+print(get_label_list())

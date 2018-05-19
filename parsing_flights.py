@@ -72,7 +72,7 @@ def best_locaction_per_day(day):
 
 def get_location_label_list():
     d1 = date(2018, 5, 3)  # start date
-    d2 = date(2018, 5, 16)  # end date
+    d2 = date(2018, 5, 17)  # end date
 
     delta = d2 - d1         # timedelta
 

@@ -3,6 +3,8 @@ from datetime import date, timedelta
 
 data_folder = 'flights/data/'
 
+lu_location = {}
+
 def is_number(s):
     try:
         float(s)
@@ -56,7 +58,7 @@ def get_best_location(locationRankingList):
     filtered = [loc for loc in locationRankingList if (loc['count'] >= min_flights and
                                                        loc['average'] >= min_points)]
     if not filtered:
-        return '' # for sake of consitency
+        return ''
     else:
         return filtered.pop()['location']
 
@@ -66,11 +68,13 @@ def best_locaction_per_day(day):
 
     best_loc = get_best_location(locationRankingList)
 
+    lu_location[best_loc] = 0 # make uniqe location
+
     return best_loc
 
 ## TODO just read files in folder...
 
-def get_location_label_list():
+def get_location_label_dict():
     d1 = date(2018, 5, 3)  # start date
     d2 = date(2018, 5, 17)  # end date
 
@@ -81,4 +85,8 @@ def get_location_label_list():
     for i in range(delta.days + 1):
         _date = d1 + timedelta(days=i)
         label_dict[_date.isoformat()] = best_locaction_per_day(_date.isoformat())
+
     return label_dict
+
+def get_location_index():
+    return list(enumerate(lu_location.keys()))

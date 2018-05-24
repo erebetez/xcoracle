@@ -66,7 +66,7 @@ def show_plots(train_loss_results, train_accuracy_results):
     plt.show()
 
 train_dataset = tf.data.TextLineDataset(train_dataset_fp)
-#train_dataset = train_dataset.skip(1)             # skip the first header row
+train_dataset = train_dataset.skip(1)             # skip the first header row
 train_dataset = train_dataset.map(parse_csv)      # parse each row
 train_dataset = train_dataset.shuffle(buffer_size=1000)  # randomize
 train_dataset = train_dataset.batch(32)

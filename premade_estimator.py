@@ -33,22 +33,19 @@ def main(argv):
     # Fetch the data
     (train_x, train_y), (test_x, test_y) = xc_data.load_data()
 
-    print(train_y)
-
     # Feature columns describe how to use the input.
     my_feature_columns = []
     for key in train_x.keys():
         my_feature_columns.append(tf.feature_column.numeric_column(key=key))
 
-    
 
     # Build 2 hidden layer DNN with 10, 10 units respectively.
     classifier = tf.estimator.DNNClassifier(
         feature_columns=my_feature_columns,
         # Two hidden layers of 10 nodes each.
-        hidden_units=[10, 10],
+        hidden_units=[10, 10], # hidden_units=[1024, 512, 256]
         # The model must choose between 3 classes.
-        n_classes=3)
+        n_classes=5)
 
     # Train the Model.
     classifier.train(
@@ -72,19 +69,19 @@ def main(argv):
         'PetalWidth': [0.5, 1.5, 2.1],
     }
 
-    predictions = classifier.predict(
-        input_fn=lambda:xc_data.eval_input_fn(predict_x,
-                                                labels=None,
-                                                batch_size=args.batch_size))
+    #predictions = classifier.predict(
+        #input_fn=lambda:xc_data.eval_input_fn(predict_x,
+                                                #labels=None,
+                                                #batch_size=args.batch_size))
 
-    template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"')
+    #template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"')
 
-    for pred_dict, expec in zip(predictions, expected):
-        class_id = pred_dict['class_ids'][0]
-        probability = pred_dict['probabilities'][class_id]
+    #for pred_dict, expec in zip(predictions, expected):
+        #class_id = pred_dict['class_ids'][0]
+        #probability = pred_dict['probabilities'][class_id]
 
-        print(template.format(xc_data.SPECIES[class_id],
-                              100 * probability, expec))
+        #print(template.format(xc_data.SPECIES[class_id],
+                              #100 * probability, expec))
 
 
 if __name__ == '__main__':

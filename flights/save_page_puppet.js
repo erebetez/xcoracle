@@ -9,8 +9,8 @@ const dates = require('./dates');
 const xcontest_url = 'http://www.xcontest.org/switzerland/de/fluge/tageswertung-pg/'
 
 const datesArray = dates.getDateStringArray(
-    new Date("2018-05-03"),
-    new Date("2018-05-11")
+    new Date("2018-04-07"),
+    new Date("2018-05-02")
 )
 
 const output_dir = 'data'
@@ -64,23 +64,28 @@ function span_xslt(page_content, cb){
     });
 }
 
-async function main(date) {
-    try {
-        let page_content = await get_flights_by_date(date);
-//         fs.writeFile(output_dir + '/' + date + '.html', page_content, ((err) => {if(err){console.log(err)}}));
+async function main(dates) {
+    var date = dates.shift();
+    if(date){
+        try {
+            let page_content = await get_flights_by_date(date);
 
-        span_xslt(page_content, ((clean_flights) => {
-//           console.log("clean_flights: " + clean_flights);
-          fs.writeFile(output_dir + '/' + date + '.xml', clean_flights, ((err) => {if(err){console.log(err)}}));
-        }));
-
-    } catch(e) {
-        console.log(e);
+            span_xslt(page_content, ((clean_flights) => {
+                fs.writeFile(output_dir + '/' + date + '.xml', clean_flights, ((err) => {if(err) {
+                            console.log(err);
+                        } else {
+                            main(dates);
+                        }
+                }));
+            }));
+        } catch(e) {
+            console.log(e);
+        }
+    } else {
+        console.log("Finished")
     }
 }
 
-// main("2018-05-16");
+// main(["2018-04-03"]);
 
-datesArray.forEach(async (date_string) => {
-    main(date_string);
-});
+main(datesArray);

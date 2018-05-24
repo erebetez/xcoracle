@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
-from datetime import date, timedelta
+from os import listdir
+from os.path import isfile, join, splitext
 
 data_folder = 'flights/data/'
 
@@ -52,7 +53,7 @@ def parse_flights(fileName):
     return locationRankingList
 
 def get_best_location(locationRankingList):
-    min_flights = 3
+    min_flights = 5
     min_points = 50
 
     filtered = [loc for loc in locationRankingList if (loc['count'] >= min_flights and
@@ -63,8 +64,8 @@ def get_best_location(locationRankingList):
         return filtered.pop()['location']
 
 
-def best_locaction_per_day(day):
-    locationRankingList = parse_flights(data_folder + day + '.xml')
+def best_locaction_per_day(day_file):
+    locationRankingList = parse_flights(data_folder + day_file)
 
     best_loc = get_best_location(locationRankingList)
 
@@ -72,19 +73,12 @@ def best_locaction_per_day(day):
 
     return best_loc
 
-## TODO just read files in folder...
-
 def get_location_label_dict():
-    d1 = date(2018, 5, 3)  # start date
-    d2 = date(2018, 5, 19)  # end date
-
-    delta = d2 - d1         # timedelta
 
     label_dict = {}
 
-    for i in range(delta.days + 1):
-        _date = d1 + timedelta(days=i)
-        label_dict[_date.isoformat()] = best_locaction_per_day(_date.isoformat())
+    for filename, file_extension in [splitext(f) for f in listdir(data_folder) if isfile(join(data_folder, f))]:
+        label_dict[filename] = best_locaction_per_day(filename + file_extension)
 
     return label_dict
 

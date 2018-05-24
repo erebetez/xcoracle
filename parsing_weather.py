@@ -10,6 +10,7 @@ def parse_meteoblue_csv(file_name):
     with open(file_name) as csvfile: #, newline=''
         weather = csv.reader(csvfile, delimiter=';')
         city = ''
+        headers = []
         for row in weather:
             if row and row[3] == '12': ## NOTE only get data at 12 o'clock.
                 today = row[0] + '-' + row[1] + '-' + row[2]
@@ -17,6 +18,9 @@ def parse_meteoblue_csv(file_name):
                 daily_dict = daily_wather_dict.get(today,{})
                 daily_dict[city] = row[5:]
                 daily_wather_dict[today] = daily_dict
+
+            if row and row[0] == 'NAME':
+                daily_wather_dict['header'] = row[5:]
 
             if row and row[0] == 'CITY':
                 city = row[5]

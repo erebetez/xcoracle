@@ -23,7 +23,7 @@ def parse_meteoblue_csv(file_name):
                 today = row[0] + '-' + row[1] + '-' + row[2]
 
                 daily_dict = daily_wather_dict.get(today,{})
-                daily_dict[city] = row[5:]
+                daily_dict[city] = [float(x) for x in row[5:]]
                 daily_wather_dict[today] = daily_dict
 
 def replace_toxic_chars(string):

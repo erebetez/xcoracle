@@ -59,7 +59,7 @@ def get_best_location(locationRankingList):
     filtered = [loc for loc in locationRankingList if (loc['count'] >= min_flights and
                                                        loc['average'] >= min_points)]
     if not filtered:
-        return ''
+        return 'None'
     else:
         return filtered.pop()['location']
 
@@ -83,4 +83,7 @@ def get_location_label_dict():
     return label_dict
 
 def get_location_index():
-    return list(enumerate(lu_location.keys()))
+    return list(enumerate(get_location_list()))
+
+def get_location_list():
+   return list(lu_location.keys())

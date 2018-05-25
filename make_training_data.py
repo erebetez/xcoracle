@@ -22,15 +22,18 @@ with open('training/train.csv', 'w') as csvfile:
     header = weater_features.pop('header')
     header.append('Location')
 
+    #print(len(header))
+    #print(weater_features.keys())
+
     training_writer.writerow(header)
 
     for day, data in weater_features.items():
-        #print(data)
-        label = location_to_index(location_label.get(day,''))
-        row = list()
-        for feature in data.values():
-            row = row + feature
+        label = location_label.get(day,False)
+        if label:
+            row = list()
+            for feature in data.values():
+                row = row + feature
 
-        row.append(label)
-        #print(len(row))
-        training_writer.writerow(row)
+            row.append(label)
+            #print(len(row))
+            training_writer.writerow(row)

@@ -18,9 +18,10 @@ from __future__ import print_function
 
 import argparse
 import tensorflow as tf
+import json
 
 import xc_data
-
+import parsing_flights as pf
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch_size', default=100, type=int, help='batch size')
@@ -38,14 +39,22 @@ def main(argv):
     for key in train_x.keys():
         my_feature_columns.append(tf.feature_column.numeric_column(key=key))
 
+    with open('training/labels.json') as f:
+      label_voca = json.load(f)
+
+    print(label_voca)
+    print(len(label_voca))
 
     # Build 2 hidden layer DNN with 10, 10 units respectively.
+    # DNNRegressor, DNNClassifier
     classifier = tf.estimator.DNNClassifier(
         feature_columns=my_feature_columns,
         # Two hidden layers of 10 nodes each.
-        hidden_units=[10, 10], # hidden_units=[1024, 512, 256]
-        # The model must choose between 3 classes.
-        n_classes=5)
+        hidden_units=[1024, 512, 256], # hidden_units=[1024, 512, 256]
+        label_vocabulary=label_voca,
+        n_classes=len(label_voca)
+        #,model_dir='/tmp/tmpm7ooyhpc'
+        )
 
     # Train the Model.
     classifier.train(
@@ -61,27 +70,31 @@ def main(argv):
     #print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
     # Generate predictions from the model
-    expected = ['Setosa', 'Versicolor', 'Virginica']
-    predict_x = {
-        'SepalLength': [5.1, 5.9, 6.9],
-        'SepalWidth': [3.3, 3.0, 3.1],
-        'PetalLength': [1.7, 4.2, 5.4],
-        'PetalWidth': [0.5, 1.5, 2.1],
-    }
+    expected = ['Riederalp']
 
-    #predictions = classifier.predict(
-        #input_fn=lambda:xc_data.eval_input_fn(predict_x,
-                                                #labels=None,
-                                                #batch_size=args.batch_size))
+    with open('training/data.json') as f:
+      predict_x = json.load(f)
 
-    #template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"')
+    predictions = classifier.predict(
+        input_fn=lambda:xc_data.eval_input_fn(predict_x,
+                                              labels=None,
+                                              batch_size=args.batch_size))
 
-    #for pred_dict, expec in zip(predictions, expected):
-        #class_id = pred_dict['class_ids'][0]
-        #probability = pred_dict['probabilities'][class_id]
+    template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"\n')
 
-        #print(template.format(xc_data.SPECIES[class_id],
-                              #100 * probability, expec))
+    for pred_dict, expec in zip(predictions, expected):
+        #print(pred_dict)
+        class_id = pred_dict['class_ids'][0]
+        probability = pred_dict['probabilities'][class_id]
+
+        print(template.format(label_voca[class_id],
+                              100 * probability, expec))
+
+        ranking = sorted(zip(pred_dict['probabilities'], label_voca), key=lambda tup: tup[0], reverse=True)
+
+        for prob, label in ranking:
+           print('\n"{}": {}'.format(label, 100 * prob))
+
 
 
 if __name__ == '__main__':

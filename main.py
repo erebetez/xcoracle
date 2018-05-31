@@ -3,7 +3,7 @@ import parsing_weather as pw
 import json
 
 wf = pw.get_weater_features()
-print(wf.keys())
+#print(wf.keys())
 
 row = list()
 header = wf['header']

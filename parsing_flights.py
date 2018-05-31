@@ -35,7 +35,8 @@ def parse_flights(fileName):
     for location, flightList in locationDict.items():
         count = len(flightList)
         pointList = map(lambda d: d.get('points'), flightList)
-        average = sum(pointList) / count
+        point_sum = sum(pointList) 
+        average = point_sum / count
         #print(pointList)
         #max_point = max(pointList)
         locationRankingList.append(
@@ -43,31 +44,51 @@ def parse_flights(fileName):
                 'location': location,
                 'count': count,
                 #'max': max_point,
-                'average': average,
-                'flights': flightList
+                'sum': point_sum,
+                'average': average
+                #'flights': flightList
             }
         )
 
-    locationRankingList = sorted(locationRankingList, key=lambda loc: loc.get('average'))
-
     return locationRankingList
 
-def get_best_location(locationRankingList):
+def get_best_location_average(locationRankingList):
     min_flights = 5
     min_points = 50
 
-    filtered = [loc for loc in locationRankingList if (loc['count'] >= min_flights and
-                                                       loc['average'] >= min_points)]
+    locationRankingList = sorted(locationRankingList, key=lambda loc: loc.get('average'))
+
+    filtered = [loc['location'] for loc in locationRankingList 
+                if (loc['count'] >= min_flights and
+                    loc['average'] >= min_points)]
     if not filtered:
         return 'None'
     else:
-        return filtered.pop()['location']
+        return filtered.pop()
 
+
+def get_best_location_sum(locationRankingList):
+    min_flights = 5
+    min_sum_points = 40
+
+    locationRankingList = sorted(locationRankingList, key=lambda loc: loc.get('sum'))
+
+    filtered = [loc['location'] for loc in locationRankingList 
+                if (loc['count'] >= min_flights and
+                    loc['sum'] >= min_sum_points)]
+
+    if not filtered:
+        return 'None'
+    else:
+        return filtered.pop()
 
 def best_locaction_per_day(day_file):
     locationRankingList = parse_flights(data_folder + day_file)
 
-    best_loc = get_best_location(locationRankingList)
+    #print(locationRankingList)
+
+    best_loc = get_best_location_sum(locationRankingList)
+    #best_loc = get_best_location_average(locationRankingList)
 
     lu_location[best_loc] = 0 # make uniqe location
 

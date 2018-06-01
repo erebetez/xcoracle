@@ -2,9 +2,10 @@ import pandas as pd
 import tensorflow as tf
 
 
-TEST_URL = "http://download.tensorflow.org/data/iris_test.csv"
-train_dataset_url = "file:///home/etienne/Programming/ml/xcoracle/training/train.csv"
+#TEST_URL = "http://download.tensorflow.org/data/iris_test.csv"
+#train_dataset_url = "file:///home/etienne/Programming/ml/xcoracle/training/train.csv"
 train_dev_dataset_url = "/home/etienne/Programming/ml/xcoracle/training/train.csv"
+test_dev_dataset_url = "/home/etienne/Programming/ml/xcoracle/training/test.csv"
 
 def maybe_download():
     train_path = tf.keras.utils.get_file(train_dataset_url.split('/')[-1], train_dataset_url)
@@ -21,10 +22,10 @@ def load_data(y_name='Location'):
     train = pd.read_csv(train_dev_dataset_url) # , header=1
     train_x, train_y = train, train.pop(y_name)
 
-    #test = pd.read_csv(test_path, names=CSV_COLUMN_NAMES, header=0)
-    #test_x, test_y = test, test.pop(y_name)
+    test = pd.read_csv(test_dev_dataset_url)
+    test_x, test_y = test, test.pop(y_name)
 
-    return (train_x, train_y), ([], [])
+    return (train_x, train_y), (test_x, test_y)
 
 
 def train_input_fn(features, labels, batch_size):

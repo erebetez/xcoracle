@@ -63,37 +63,39 @@ def main(argv):
         steps=args.train_steps)
 
     ## Evaluate the model.
-    #eval_result = classifier.evaluate(
-        #input_fn=lambda:xc_data.eval_input_fn(test_x, test_y,
-                                                #args.batch_size))
+    eval_result = classifier.evaluate(
+        input_fn=lambda:xc_data.eval_input_fn(test_x, test_y,
+                                                args.batch_size))
 
-    #print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
+    print(eval_result)
+
+    print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
     # Generate predictions from the model
     expected = ['Riederalp']
 
-    with open('training/data.json') as f:
-      predict_x = json.load(f)
+    #with open('training/data.json') as f:
+      #predict_x = json.load(f)
 
-    predictions = classifier.predict(
-        input_fn=lambda:xc_data.eval_input_fn(predict_x,
-                                              labels=None,
-                                              batch_size=args.batch_size))
+    #predictions = classifier.predict(
+        #input_fn=lambda:xc_data.eval_input_fn(predict_x,
+                                              #labels=None,
+                                              #batch_size=args.batch_size))
 
-    template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"\n')
+    #template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"\n')
 
-    for pred_dict, expec in zip(predictions, expected):
-        #print(pred_dict)
-        class_id = pred_dict['class_ids'][0]
-        probability = pred_dict['probabilities'][class_id]
+    #for pred_dict, expec in zip(predictions, expected):
+        ##print(pred_dict)
+        #class_id = pred_dict['class_ids'][0]
+        #probability = pred_dict['probabilities'][class_id]
 
-        print(template.format(label_voca[class_id],
-                              100 * probability, expec))
+        #print(template.format(label_voca[class_id],
+                              #100 * probability, expec))
 
-        ranking = sorted(zip(pred_dict['probabilities'], label_voca), key=lambda tup: tup[0], reverse=True)
+        #ranking = sorted(zip(pred_dict['probabilities'], label_voca), key=lambda tup: tup[0], reverse=True)
 
-        for prob, label in ranking:
-           print('\n"{}": {}'.format(label, 100 * prob))
+        #for prob, label in ranking:
+           #print('\n"{}": {}'.format(label, 100 * prob))
 
 
 

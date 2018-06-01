@@ -7,17 +7,12 @@ weater_features = pw.get_weater_features()
 
 location_label = pf.get_location_label_dict()
 
-location_index = pf.get_location_index()
+with open('training/train.csv', 'w') as train_csvfile, \
+     open('training/test.csv', 'w') as test_csvfile:
 
-def location_to_index(loc):
-    for pair in location_index:
-        if pair[1] == loc:
-            return pair[0]
 
-#print(location_index)
-
-with open('training/train.csv', 'w') as csvfile:
-    training_writer = csv.writer(csvfile, delimiter=',')
+    train_writer = csv.writer(train_csvfile, delimiter=',')
+    test_writer = csv.writer(test_csvfile, delimiter=',')
 
     header = weater_features.pop('header')
     header.append('Location')
@@ -25,7 +20,10 @@ with open('training/train.csv', 'w') as csvfile:
     #print(len(header))
     #print(weater_features.keys())
 
-    training_writer.writerow(header)
+    train_writer.writerow(header)
+    test_writer.writerow(header)
+
+    count = 0
 
     for day, data in weater_features.items():
         label = location_label.get(day,False)
@@ -36,4 +34,10 @@ with open('training/train.csv', 'w') as csvfile:
 
             row.append(label)
             #print(len(row))
-            training_writer.writerow(row)
+            if (count % 10) == 0: ## TODO decrese number as data pool gets bigger
+                test_writer.writerow(row)
+            else:
+                train_writer.writerow(row)
+
+            count += 1
+

@@ -8,11 +8,6 @@ const dates = require('./dates');
 
 const xcontest_url = 'http://www.xcontest.org/switzerland/de/fluge/tageswertung-pg/'
 
-const datesArray = dates.getDateStringArray(
-    new Date("2018-04-07"),
-    new Date("2018-05-02")
-)
-
 const output_dir = 'data'
 
 // console.log(datesArray);
@@ -86,6 +81,11 @@ async function main(dates) {
     }
 }
 
-// main(["2018-04-03"]);
+main(["2018-05-29"]);
 
-main(datesArray);
+const datesArray = dates.getDateStringArray(
+    new Date("2018-05-26"),
+    new Date("2018-05-31")
+)
+
+// main(datesArray);

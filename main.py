@@ -10,7 +10,7 @@ header = wf['header']
 
 
 
-for feature in wf['2018-05-25'].values():
+for feature in wf['2018-06-01'].values():
     row = row + feature
 
 test_data = dict(zip(header,[[r] for r in row])) #

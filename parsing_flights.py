@@ -87,8 +87,8 @@ def best_locaction_per_day(day_file):
 
     #print(locationRankingList)
 
-    best_loc = get_best_location_sum(locationRankingList)
-    #best_loc = get_best_location_average(locationRankingList)
+    #best_loc = get_best_location_sum(locationRankingList)
+    best_loc = get_best_location_average(locationRankingList)
 
     lu_location[best_loc] = 0 # make uniqe location
 
